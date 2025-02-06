@@ -157,3 +157,20 @@ async def call_admins(text):
 
         for admin in admins:
             await bot.send_message(admin.tg_id, text)
+
+
+async def phone_validate(message: Message):
+    if message.contact is not None:
+        number = message.contact.phone_number
+    else:
+        number = message.text
+        result = re.match(
+            r'^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$',
+            number)
+        if result is None:
+            kb = Keyboard.send_phone()
+            await message.answer(texts.pls_send_phone, reply_markup=kb)
+
+            return None
+
+    return number
