@@ -27,8 +27,11 @@ async def main():
 
 
 if __name__ == "__main__":
-    if DEBUG == 1:
-        logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-    else:
-        logging.basicConfig(level=logging.INFO, filename="logs.log")
+    console_out = logging.StreamHandler()
+    file_handler = logging.FileHandler("logs.log", encoding="utf8")
+    formatter = logging.Formatter("\n%(asctime)s - %(levelname)s\n%(message)s")
+    file_handler.setFormatter(formatter)
+    logging.basicConfig(handlers=(file_handler, console_out),
+                        level=logging.INFO)
+    
     asyncio.run(main())
